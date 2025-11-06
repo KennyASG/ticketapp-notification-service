@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-service
+  namespace: microservices
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification-service
+  template:
+    metadata:
+      labels:
+        app: notification-service
+    spec:
+      containers:
+        - name: notification-service
+          image: kennyadg/notification-service:latest
+          ports:
+            - containerPort: 3005
+          env:
+            - name: DATABASE_URL
+              value: "postgres://admin:admin@10.241.222.216:30432/ticketapp"
+            - name: JWT_SECRET
+              value: "supersecret"
+            - name: PORT
+              value: "3005"
+            - name: SMTP_HOST
+              value: "smtp.gmail.com"
+            - name: SMTP_PORT
+              value: "587"
+            - name: SMTP_SECURE
+              value: "false"
+            - name: SMTP_USER
+              value: "tu-email@gmail.com"
+            - name: SMTP_PASS
+              value: "tu-app-password"
+            - name: EMAIL_FROM
+              value: "tickets@ticketapp.com"
+            - name: EMAIL_FROM_NAME
+              value: "TicketApp"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
